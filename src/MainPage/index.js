@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Row, Col, Card, Modal, Form, Input, DatePicker, Alert, Select  } from 'antd';
+import { Button, Row, Col, Card, Modal, Form, Input, DatePicker, Select  } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import '../App.css';
 
@@ -48,7 +48,6 @@ class HomePage extends Component {
 	}
 
 	handleChange = (value) => {
-		console.log(`selected ${value}`);
 		this.setState({ destinationColumnTitle: value });
 	}
 
@@ -70,12 +69,12 @@ class HomePage extends Component {
 	    if (this.state.sourceColumnTitle !== this.state.destinationColumnTitle) {
 	    	switch(this.state.sourceColumnTitle) {
 			  case 'Backlogs':
-		    		this.state.backlog_task_list.map((task, index) => { 
-		    			if(index === this.state.moveIndex){
+			  		this.state.backlog_task_list.forEach((task, index) => {
+					    if(index === this.state.moveIndex){
 		    				this.setState({ moveTaskValue: task });	
 			    			this.state.backlog_task_list.splice(index,1);
 		    			}
-		    		})
+					});
 				    switch(values.select_list) {
 				    	case 'Development':
 				    		if (this.state.development_task_list.length < 4) {
@@ -91,17 +90,17 @@ class HomePage extends Component {
 					    case 'Acceptance':
 					    	this.state.acceptance_task_list.push(this.state.moveTaskValue);
 					    break;
+					    default:
 				    }
 				    this.setmodalVisible(false)
 			    break;
 			  case 'Development':
-			    		this.state.development_task_list.map((task, index) => { 
-			    			if(index === this.state.moveIndex){
+			    		this.state.development_task_list.forEach((task, index) => {
+						    if(index === this.state.moveIndex){
 			    				this.setState({ moveTaskValue: task });	
 				    			this.state.development_task_list.splice(index,1);
 			    			}
-			    		})
-					    
+						});
 					    switch(values.select_list) {
 					    	case 'Backlogs':
 					    		if (this.state.backlog_task_list.length < 5) {
@@ -117,17 +116,17 @@ class HomePage extends Component {
 						    case 'Acceptance':
 						    	this.state.acceptance_task_list.push(this.state.moveTaskValue);
 						    break;
+						    default:
 					    }
 					    this.setmodalVisible(false)
 			    break;
 			  case 'Code Review':
-				    		this.state.code_review_task_list.map((task, index) => { 
-				    			if(index === this.state.moveIndex){
+				    		this.state.code_review_task_list.forEach((task, index) => {
+							    if(index === this.state.moveIndex){
 				    				this.setState({ moveTaskValue: task });	
 					    			this.state.code_review_task_list.splice(index,1);
 				    			}
-				    		})
-					    
+							});
 					    switch(values.select_list) {
 					    	case 'Development':
 					    		if (this.state.development_task_list.length < 4) {
@@ -148,17 +147,17 @@ class HomePage extends Component {
 						    case 'Acceptance':
 						    	this.state.acceptance_task_list.push(this.state.moveTaskValue);
 						    break;
+						    default:
 					    }
 					    this.setmodalVisible(false)
 			    break;
 			   case 'Acceptance':
-				    		this.state.acceptance_task_list.map((task, index) => { 
-				    			if(index === this.state.moveIndex){
+				    		this.state.acceptance_task_list.forEach((task, index) => {
+							   if(index === this.state.moveIndex){
 				    				this.setState({ moveTaskValue: task });	
 					    			this.state.acceptance_task_list.splice(index,1);
 				    			}
-				    		})
-					    
+							});
 					    switch(values.select_list) {
 					    	case 'Development':
 					    		if (this.state.development_task_list.length < 4) {
@@ -179,9 +178,11 @@ class HomePage extends Component {
 					    			alert("Task limit exceed....") 
 					    		}
 						    break;
+						    default:
 					    }
 					    this.setmodalVisible(false)
-			    break;   
+			    break;
+			    default:
 			}
 		    this.setState({ moveModalVisible: false });
 	    }else{
@@ -209,7 +210,7 @@ class HomePage extends Component {
 		                  {this.state.backlog_task_list.length > 0 ?
 			                  	this.state.backlog_task_list.map((task, index) => {
 			                  		return(
-			                  			<Card key={index} title={task.title} extra={<a href="#" onClick={() => this.setMoveModalVisible(true, index, 'Backlogs')}>Move</a>} style={{ marginTop: 20}}>
+			                  			<Card key={index} title={task.title} extra={<Button type="link" block onClick={() => this.setMoveModalVisible(true, index, 'Backlogs')}>Move</Button>} style={{ marginTop: 20}}>
 									      <p style={{wordWrap: 'break-word'}}>Description: {task.description}</p>
 									      <p>Due Date : {task.due_date}</p>
 									    </Card>
@@ -225,7 +226,7 @@ class HomePage extends Component {
 		                	{this.state.development_task_list.length > 0 ?
 			                  	this.state.development_task_list.map((task, index) => {
 			                  		return(
-			                  			<Card key={index} title={task.title} extra={<a href="#" onClick={() => this.setMoveModalVisible(true, index, 'Development')}>Move</a>} style={{ marginTop: 20}}>
+			                  			<Card key={index} title={task.title} extra={<Button type="link" block onClick={() => this.setMoveModalVisible(true, index, 'Development')}>Move</Button>} style={{ marginTop: 20}}>
 									      <p style={{wordWrap: 'break-word'}}>Description: {task.description}</p>
 									      <p>Due Date : {task.due_date}</p>
 									    </Card>
@@ -241,7 +242,7 @@ class HomePage extends Component {
 		                	{this.state.code_review_task_list.length > 0 ?
 			                  	this.state.code_review_task_list.map((task, index) => {
 			                  		return(
-			                  			<Card key={index} title={task.title} extra={<a href="#" onClick={() => this.setMoveModalVisible(true, index, 'Code Review')}>Move</a>} style={{ marginTop: 20}}>
+			                  			<Card key={index} title={task.title} extra={<Button type="link" block onClick={() => this.setMoveModalVisible(true, index, 'Code Review')}>Move</Button>} style={{ marginTop: 20}}>
 									      <p style={{wordWrap: 'break-word'}}>Description: {task.description}</p>
 									      <p>Due Date : {task.due_date}</p>
 									    </Card>
@@ -257,7 +258,7 @@ class HomePage extends Component {
 		                	{this.state.acceptance_task_list.length > 0 ?
 			                  	this.state.acceptance_task_list.map((task, index) => {
 			                  		return(
-			                  			<Card key={index} title={task.title} extra={<a href="#" onClick={() => this.setMoveModalVisible(true, index, 'Acceptance')}>Move</a>} style={{ marginTop: 20, backgroundColor: '#52c41a', color: '#ffffff'}}>
+			                  			<Card key={index} title={task.title} extra={<Button type="text" block onClick={() => this.setMoveModalVisible(true, index, 'Acceptance')}>Move</Button>} style={{ marginTop: 20, backgroundColor: '#52c41a', color: '#ffffff'}}>
 									      <p style={{wordWrap: 'break-word'}}>Description: {task.description}</p>
 									      <p>Due Date : {task.due_date}</p>
 									    </Card>
